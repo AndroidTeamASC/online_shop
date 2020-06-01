@@ -19,7 +19,16 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('homepage');
+
+Route::get('/shop', 'HomeController@shop')->name('shop');
+
+Route::get('/product_detail/{id}', 'HomeController@productDetail')->name('product_detail');
+
+Route::get('/cart', 'HomeController@cart')->name('cart');
+
+Route::post('/order', 'HomeController@order')->name('order');
+
 
 //backend
 Route::group(['middleware' => ['role:admin']], function () {

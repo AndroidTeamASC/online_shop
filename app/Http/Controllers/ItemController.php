@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Category;
-use App\Brand;
 use App\Item;
 class ItemController extends Controller
 {
@@ -17,8 +16,7 @@ class ItemController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $brands = Brand::all();
-        return view('backend.item.index',compact('categories','brands'));
+        return view('backend.item.index',compact('categories'));
     }
 
     /**
