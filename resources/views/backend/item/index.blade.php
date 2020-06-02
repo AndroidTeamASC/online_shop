@@ -78,7 +78,7 @@
 								</div>
 								<div class="form-group">
 									<label for="type">Item Image</label>
-									<input type="file" class="form-control @error('item') is-invalid @enderror" id="item_image" name="item_image" >
+									<input type="file" class="form-control @error('item') is-invalid @enderror" id="item_image" name="item_image[]" multiple="multiple">
 										<p class="error-message-item_image p-2 text-md-left text-danger"></p>
 								</div>
 								<div class="form-group">
@@ -100,7 +100,23 @@
 										@endforeach
 									</select>
 										<p class="error-message-item_category p-2 text-md-left text-danger"></p>
-								</div> 
+								</div>
+								<div class="form-group ">
+								 		<label for="type"  >Size </label>
+									 	<div class="col-md-12">
+									 		@foreach($sizes as $size)
+											 <div class="form-check form-check-inline mr-sm-2 ">
+						                        <input type="checkbox" class="form-check-input" id="{{$size->size}}" name="size[]" multiple="multiple" value="{{$size->id}}">
+						                        <label class="form-check-label" for="{{$size->size}}">{{$size->size}}</label>
+						                      </div>
+
+										@endforeach
+									 	</div>
+										
+										 
+										 
+										<p class="error-message-item_category p-2 text-md-left text-danger"></p>
+								</div>  
 							</div>
 						</div>
 					</div>
@@ -150,7 +166,7 @@
 
 	                  <div class="col-md-6">
 	                      <input type="hidden" name="item_old_image" id="item_old_image">
-	                      <input id="edit_item_image" type="file" class="form-control @error('edit_item_image') is-invalid @enderror" name="edit_item_image" value="{{ old('edit_item_image') }}" autocomplete="edit_image" autofocus>
+	                      <input id="edit_item_image" type="file" class="form-control @error('edit_item_image') is-invalid @enderror" name="edit_item_image[]" multiple="multiple" value="{{ old('edit_item_image') }}" autocomplete="edit_image" autofocus>
 	                      <p class="edit-error-message-image p-2 text-md-left text-danger"></p>
 	                      <img class="item_old_image img-fluid pt-2" style="width: 50px">
 	                  </div>
@@ -180,10 +196,16 @@
 						<p class="error-message-item_brand p-2 text-md-left text-danger"></p>
 						</div>
 		
-					</div> 
+					</div>
+					<div class="form-group row">
+							<label for="type" class="col-md-4 col-form-label text-md-right">Size </label>
+								<div class="col-md-6" id="edit_size">
+									
+								</div>  
 	                
 	              </div> 
 	              </div>
+	          </div>
 	            </div>
 	          <div class="modal-footer">
 	            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -220,12 +242,16 @@
 				success:(data) => {
 					var j =1;
 					var html = html;
-					console.log(data);
-					$.each(data,function(i,v){
+					 
+					 
+					$.each(data,function(i,v){ 
+						 var images  = JSON.parse(v.item_image);
+						console.log(images[0]);
 						html += `<tr>
 									<td>${j++}</td>
 									<td>${v.item_name}</td>
-									<td><img src="{{asset('${v.item_image}')}}" width=200 height = 200></td>
+									 
+									<td><img src="{{asset('${images[0]}')}}" width=200 height = 200></td>
 									<td>
 										<button class="btn btn-primary btn-sm d-inline-block editItem" data-id="${v.id}"><i class="fa fa-edit text-white"></i></button>
 										<button class="btn btn-secondary btn-sm d-inline-block deleteItem" data-id="${v.id}"><i class="fa fa-trash text-white"></i></button>
@@ -297,16 +323,34 @@
       $('.alertMessage').addClass('d-none');
       var item_id = $(this).data('id');
       var url="{{route('admin.item.edit',':id')}}";
+      var edit_size = "";
       url=url.replace(':id',item_id);
         $.ajax({
           url: url,
           type: "GET",
           dataType: 'json',
           success: function (response) {
-            var data = response.item
-            var brands = response.brands
+            var data = response.item;
+            var sizes = response.sizes;
+            var size =  data.size;
+          	 
+            $.each(sizes,function(i,v){
+            	 if (size.includes(v.id)) {
+                      
+            	edit_size += `
+                        <div class="form-check form-check-inline mr-sm-2 ">
+                         <input type="checkbox" class=form-check-input" id="${v.size}" name="size[]" multiple="multiple" value="${v.id}"
+                         checked ="checked"><label class="form-check-label" for="${v.size}">${v.size}</label>
+                     </div>`;
 
-            console.log(brands);
+                 }else{
+                 	edit_size += `
+                        <div class="form-check form-check-inline mr-sm-2 ">
+                         <input type="checkbox" class=form-check-input" id="${v.size}" name="size[]" multiple="multiple" value="${v.id}"
+                         ><label class="form-check-label" for="${v.size}">${v.size}</label>
+                     </div>`;
+                 }
+            })
               $('#edit_modelHeading').html("Edit Item");
               $('#editSaveBtn').text("Update");
               $('#editItemModal').modal('show');
@@ -318,6 +362,7 @@
               $('.item_old_image').attr('src',`{{asset('${data.item_image}')}}`);
               $("#edit_brand").val(data.brand_id);
               $("#edit_category").val(data.category_id);
+              $('#edit_size').html(edit_size);
           },
           error: function (error) {
           }
@@ -398,7 +443,10 @@
         }
     }); 
 
+  	  $('.js-example-basic-multiple').select2();
 	
 	})
+
+	
 </script>
 @endsection

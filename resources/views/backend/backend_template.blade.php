@@ -28,6 +28,9 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="{{asset('css/app.css')}}">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -177,6 +180,7 @@
     <script src="{{asset('backend_template/js/home-premium.js')}}"> </script>
     <!-- Main File-->
     <script src="{{asset('backend_template/js/front.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
     
     @yield('script')
   </body>
