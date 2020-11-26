@@ -95,11 +95,4 @@ class BrandController extends Controller
         $brand->delete();
       return response()->json(['success' => "Brand deleted Successfully"]);
     }
-
-    public function get_brand()
-    {
-        $brands = Brand::all();
-
-        return $brands;
-    }
 }

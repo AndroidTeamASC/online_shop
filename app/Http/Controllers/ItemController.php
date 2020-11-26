@@ -46,11 +46,11 @@ class ItemController extends Controller
             "category" => "required"
               
         ]);
-             $image = $request->file('item_image');
-             if($image){
-            $name=uniqid().time().'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('image/profile'),$name);
-            $path='image/profile/'.$name;
+         $image = $request->file('item_image');
+         if($image){
+        $name=uniqid().time().'.'.$image->getClientOriginalExtension();
+        $image->move(public_path('image/profile'),$name);
+        $path='image/profile/'.$name;
         }else{
              $path="";
         }
